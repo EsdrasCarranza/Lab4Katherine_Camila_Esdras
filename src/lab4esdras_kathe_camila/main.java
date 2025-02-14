@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import java.lang.String;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class main extends JFrame {
@@ -56,6 +57,8 @@ public class main extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Juego fijo seleccionado");
+                //JuegoAhorcadoFijo fijo = new JuegoAhorcadoFijo(String PalabraFija, String PalabraSecreta, String Palabractual, int intentosRestantes);
+                //JuegoAhorcadoFijo.fijo();
             }
         });
 
@@ -72,6 +75,7 @@ public class main extends JFrame {
                 AdminPalabrasSecretas admin = new AdminPalabrasSecretas();
                 admin.agregarPalabra("JAVA");
                 admin.agregarPalabra("PROGRAMACION");
+                admin.agregarPalabra("CAMILA");
 
                 JuegoAhorcadoAzar juego = new JuegoAhorcadoAzar(admin);
                 juego.jugar();
@@ -96,7 +100,7 @@ public class main extends JFrame {
 
                     System.out.println("Palabra ingresada: " + nuevaPalabra);
                 } else {
-                    JOptionPane.showMessageDialog(null, "No se agregó una palabra válida.");
+                    JOptionPane.showMessageDialog(null, "No se agregó una palabra valida.");
                 }
             }
         });
@@ -116,9 +120,6 @@ public class main extends JFrame {
 
     }
 
-    public static void main(String[] args) {
-        main m = new main();
-        m.setVisible(true);
-    }
+  
 
 }

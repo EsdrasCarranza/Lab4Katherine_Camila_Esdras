@@ -13,9 +13,9 @@ public class Lab4Esdras_Kathe_Camila {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        
-        // TODO code application logic here
+     public static void main(String[] args) {
+        main m = new main();
+        m.setVisible(true);
     }
     
 }
