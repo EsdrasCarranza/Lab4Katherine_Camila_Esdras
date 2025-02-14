@@ -57,8 +57,14 @@ public class main extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Juego fijo seleccionado");
-                //JuegoAhorcadoFijo fijo = new JuegoAhorcadoFijo(String PalabraFija, String PalabraSecreta, String Palabractual, int intentosRestantes);
-                //JuegoAhorcadoFijo.fijo();
+
+                // Palabra predefinida y cantidad de intentos
+                String palabraFija = "PROGRAMAR";
+                int intentosMaximos = 6;
+
+                // Crear instancia del juego y ejecutarlo
+                JuegoAhorcadoFijo juego = new JuegoAhorcadoFijo(palabraFija, intentosMaximos);
+                juego.jugar();
             }
         });
 
@@ -119,7 +125,5 @@ public class main extends JFrame {
         });
 
     }
-
-  
 
 }

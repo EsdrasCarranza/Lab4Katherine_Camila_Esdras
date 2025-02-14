@@ -11,32 +11,36 @@ import javax.swing.JOptionPane;
  * @author 50488
  */
 public class JuegoAhorcadoFijo extends JuegoAhorcadoBase {
-    String PalabraFija;
+  private String PalabraFija;
 
-    public JuegoAhorcadoFijo(String PalabraFija, String PalabraSecreta, String Palabractual, int intentosRestantes) {
-        super(PalabraSecreta, Palabractual, intentosRestantes);
+    public JuegoAhorcadoFijo(String PalabraFija, int intentosRestantes) {
+        super(PalabraFija, "_".repeat(PalabraFija.length()), intentosRestantes);
         this.PalabraFija = PalabraFija;
     }
 
-    
-
     @Override
     public char actualizarPalabraActual(char letra) {
-       String nuevaPalabraActual = "";
+        if (PalabraSecretaFija == null) {
+            throw new IllegalStateException("Error: PalabraSecretaFija no ha sido inicializada.");
+        }
+
+        StringBuilder nuevaPalabraActual = new StringBuilder(Palabractual);
         for (int i = 0; i < PalabraSecretaFija.length(); i++) {
             if (PalabraSecretaFija.charAt(i) == letra) {
-                nuevaPalabraActual += letra; 
-            } else {
-                nuevaPalabraActual += Palabractual.charAt(i); 
+                nuevaPalabraActual.setCharAt(i, letra);
             }
         }
-        Palabractual = nuevaPalabraActual;
-        return 0;
+        Palabractual = nuevaPalabraActual.toString();
+        return letra;
     }
-   
+
     @Override
     public boolean verificarLetra(char letra) {
-    boolean PalabraCorrecta = PalabraSecretaFija.indexOf(letra) >= 0;
+        if (PalabraSecretaFija == null) {
+            throw new IllegalStateException("Error: PalabraSecretaFija no ha sido inicializada.");
+        }
+
+        boolean PalabraCorrecta = PalabraSecretaFija.indexOf(letra) >= 0;
         if (PalabraCorrecta) {
             actualizarPalabraActual(letra);
         } else {
@@ -47,32 +51,31 @@ public class JuegoAhorcadoFijo extends JuegoAhorcadoBase {
 
     @Override
     public boolean hasGanado() {
-     return Palabractual.equals(PalabraSecretaFija);
+        return Palabractual.equals(PalabraSecretaFija);
     }
 
     @Override
     public void jugar() {
         JOptionPane.showMessageDialog(null, "HORA DE EMPEZAR \nAdivine la palabra");
         while (!hasGanado() && intentosRestantes > 0) {
-            String letra=" ";
-            letra = JOptionPane.showInputDialog(null, "Palabra: " + Palabractual
+            String letra = JOptionPane.showInputDialog(null, "Palabra: " + Palabractual
                     + "\nIntentos: " + intentosRestantes
                     + "\nIngresa una letra:");
+
             if (letra == null || letra.isEmpty()) {
                 break;
-            }else{ 
-                letra=letra.toUpperCase();
+            } else {
+                letra = letra.toUpperCase();
                 char letraChar = letra.charAt(0);
                 if (verificarLetra(letraChar)) {
-                    actualizarPalabraActual(letraChar);
                     if (hasGanado()) {
-                        JOptionPane.showMessageDialog(null, "FELICIDADES USTED GANO! Su palabra era: " + intentosRestantes);
+                        JOptionPane.showMessageDialog(null, "¡FELICIDADES! Ganaste. La palabra era: " + PalabraSecretaFija);
                     }
                 } else {
                     if (intentosRestantes == 0) {
-                        JOptionPane.showMessageDialog(null, "PERDEDOR! La palabra era: " + intentosRestantes);
+                        JOptionPane.showMessageDialog(null, "¡PERDISTE! La palabra era: " + PalabraSecretaFija);
                     } else {
-                        JOptionPane.showMessageDialog(null, "OH NO, Letra incorrecta, por favor intenta de nuevo.");
+                        JOptionPane.showMessageDialog(null, "Letra incorrecta, intenta de nuevo.");
                     }
                 }
             }
@@ -80,7 +83,7 @@ public class JuegoAhorcadoFijo extends JuegoAhorcadoBase {
     }
 
     @Override
-    public void inicializarPalabraSecreta() {
+   public void inicializarPalabraSecreta() {
         System.out.println("La palabra secreta es: " + PalabraSecretaFija);
-    }   
+    }
 }
