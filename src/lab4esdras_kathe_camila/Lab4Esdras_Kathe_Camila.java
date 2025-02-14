@@ -14,7 +14,7 @@ public class Lab4Esdras_Kathe_Camila {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("holis");
+        
         // TODO code application logic here
     }
     
