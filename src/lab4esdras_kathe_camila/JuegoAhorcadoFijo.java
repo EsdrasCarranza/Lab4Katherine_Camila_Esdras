@@ -18,41 +18,40 @@ public class JuegoAhorcadoFijo extends JuegoAhorcadoBase {
         this.PalabraFija = PalabraFija;
     }
 
-    @Override
     public char actualizarPalabraActual(char letra) {
-        if (PalabraSecretaFija == null) {
-            throw new IllegalStateException("Error: PalabraSecretaFija no ha sido inicializada.");
-        }
-
-        StringBuilder nuevaPalabraActual = new StringBuilder(Palabractual);
-        for (int i = 0; i < PalabraSecretaFija.length(); i++) {
-            if (PalabraSecretaFija.charAt(i) == letra) {
-                nuevaPalabraActual.setCharAt(i, letra);
-            }
-        }
-        Palabractual = nuevaPalabraActual.toString();
-        return letra;
+    if (PalabraFija == null) {
+        throw new IllegalStateException("Error: PalabraFija no ha sido inicializada.");
     }
 
-    @Override
-    public boolean verificarLetra(char letra) {
-        if (PalabraSecretaFija == null) {
-            throw new IllegalStateException("Error: PalabraSecretaFija no ha sido inicializada.");
+    StringBuilder nuevaPalabraActual = new StringBuilder(Palabractual);
+    for (int i = 0; i < PalabraFija.length(); i++) {
+        if (PalabraFija.charAt(i) == letra) {
+            nuevaPalabraActual.setCharAt(i, letra);
         }
+    }
+    Palabractual = nuevaPalabraActual.toString();
+    return letra;
+}
 
-        boolean PalabraCorrecta = PalabraSecretaFija.indexOf(letra) >= 0;
-        if (PalabraCorrecta) {
-            actualizarPalabraActual(letra);
-        } else {
-            intentosRestantes--;
-        }
-        return PalabraCorrecta;
+@Override
+public boolean verificarLetra(char letra) {
+    if (PalabraFija == null) {
+        throw new IllegalStateException("Error: PalabraFija no ha sido inicializada.");
     }
 
-    @Override
-    public boolean hasGanado() {
-        return Palabractual.equals(PalabraSecretaFija);
+    boolean PalabraCorrecta = PalabraFija.indexOf(letra) >= 0;
+    if (PalabraCorrecta) {
+        actualizarPalabraActual(letra);
+    } else {
+        intentosRestantes--;
     }
+    return PalabraCorrecta;
+}
+
+@Override
+public boolean hasGanado() {
+    return Palabractual.equals(PalabraFija);
+}
 
     @Override
     public void jugar() {
