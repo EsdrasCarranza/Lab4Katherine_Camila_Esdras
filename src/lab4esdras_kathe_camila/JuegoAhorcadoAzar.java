@@ -12,39 +12,46 @@ import javax.swing.JOptionPane;
  * @author 50488
  */
 public class JuegoAhorcadoAzar extends JuegoAhorcadoBase {
-    private static final String[] PALABRAS_POSIBLES = {
-        "JAVA", "PROGRAMACION", "ORDENADOR", "LENGUAJE", "VARIABLE", "CLASE", "OBJETO"
-    };
+    private AdminPalabrasSecretas adminPalabras;
 
-    public JuegoAhorcadoAzar() {
-        super(seleccionarPalabraAleatoria(), "", 10);
+    public JuegoAhorcadoAzar(AdminPalabrasSecretas adminPalabras) {
+        super("", "", 10);
+        this.adminPalabras = adminPalabras;
+        inicializarPalabraSecreta(); // Se asegura de que la palabra nunca sea null
     }
 
-    private static String seleccionarPalabraAleatoria() {
-        Random random = new Random();
-        return PALABRAS_POSIBLES[random.nextInt(PALABRAS_POSIBLES.length)];
+    private String seleccionarPalabraAleatoria() {
+        String palabra = adminPalabras.obtenerPalabraAlAzar();
+        return (palabra != null) ? palabra : "VACIO"; // Previene errores
+    }
+
+    @Override
+    public void inicializarPalabraSecreta() {
+        PalabraSecretaFija = seleccionarPalabraAleatoria();
+        Palabractual = "_".repeat(PalabraSecretaFija.length());
     }
 
     @Override
     public char actualizarPalabraActual(char letra) {
-        String nuevaPalabraActual = "";
+        StringBuilder nuevaPalabraActual = new StringBuilder(Palabractual);
         boolean encontrada = false;
 
         for (int i = 0; i < PalabraSecretaFija.length(); i++) {
             if (PalabraSecretaFija.charAt(i) == letra) {
-                nuevaPalabraActual += letra;
+                nuevaPalabraActual.setCharAt(i, letra);
                 encontrada = true;
-            } else {
-                nuevaPalabraActual += Palabractual.charAt(i);
             }
         }
 
-        Palabractual = nuevaPalabraActual;
+        Palabractual = nuevaPalabraActual.toString();
         return encontrada ? letra : '_';
     }
 
     @Override
     public boolean verificarLetra(char letra) {
+        if (PalabraSecretaFija == null) {
+            return false; // Evita error si la palabra no está inicializada
+        }
         boolean esCorrecta = PalabraSecretaFija.indexOf(letra) >= 0;
         if (esCorrecta) {
             actualizarPalabraActual(letra);
@@ -61,6 +68,7 @@ public class JuegoAhorcadoAzar extends JuegoAhorcadoBase {
 
     public void jugar() {
         JOptionPane.showMessageDialog(null, "¡HORA DE EMPEZAR!\nAdivina la palabra");
+
         while (!hasGanado() && intentosRestantes > 0) {
             String letra = JOptionPane.showInputDialog(null, "Palabra: " + Palabractual
                     + "\nIntentos: " + intentosRestantes
@@ -68,27 +76,22 @@ public class JuegoAhorcadoAzar extends JuegoAhorcadoBase {
 
             if (letra == null || letra.isEmpty()) {
                 break;
+            }
+
+            letra = letra.toUpperCase();
+            char letraChar = letra.charAt(0);
+
+            if (verificarLetra(letraChar)) {
+                if (hasGanado()) {
+                    JOptionPane.showMessageDialog(null, "¡FELICIDADES, GANASTE! La palabra era: " + PalabraSecretaFija);
+                }
             } else {
-                letra = letra.toUpperCase();
-                char letraChar = letra.charAt(0);
-                if (verificarLetra(letraChar)) {
-                    if (hasGanado()) {
-                        JOptionPane.showMessageDialog(null, "¡FELICIDADES, GANASTE! La palabra era: " + PalabraSecretaFija);
-                    }
+                if (intentosRestantes == 0) {
+                    JOptionPane.showMessageDialog(null, "¡UPS, PERDISTE! La palabra era: " + PalabraSecretaFija);
                 } else {
-                    if (intentosRestantes == 0) {
-                        JOptionPane.showMessageDialog(null, "¡UPS, PERDISTE! La palabra era: " + PalabraSecretaFija);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "UPS. Letra incorrecta, intenta de nuevo.");
-                    }
+                    JOptionPane.showMessageDialog(null, "UPS. Letra incorrecta, intenta de nuevo.");
                 }
             }
         }
     }
-
-   @Override
-public void inicializarPalabraSecreta() {
-    PalabraSecretaFija = seleccionarPalabraAleatoria(); 
-    Palabractual = "_".repeat(PalabraSecretaFija.length());
-}
 }
